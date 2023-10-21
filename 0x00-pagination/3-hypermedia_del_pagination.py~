@@ -1,0 +1,25 @@
+def get_hyper_index(self, index: int = None, page_size: int = 10) -> dict:
+    assert isinstance(index, int) and index >= 0, "Invalid index value"
+    assert isinstance(page_size, int) and page_size > 0, "Invalid page_size value"
+
+    dataset = self.indexed_dataset()
+    max_index = len(dataset) - 1
+
+    # Calculate current index
+    if index is None:
+        index = 0
+    else:
+        index = min(index, max_index)
+
+    # Calculate next index
+    next_index = min(index + page_size, max_index)
+
+    # Get data for the current page
+    data = [dataset[i] for i in range(index, min(next_index + 1, max_index + 1))]
+
+    return {
+        "index": index,
+        "next_index": next_index + 1 if next_index < max_index else None,
+        "page_size": page_size,
+        "data": data
+    }
